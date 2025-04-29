@@ -1,7 +1,9 @@
 import { useState } from "react";
 import "./ColorForm.css";
-import ColorInput from "./ColorInput";
+import ColorInput from "../FormInputs/ColorInput";
 import { v4 as uuid } from "uuid";
+import Button from "../Button/Button";
+import TextInput from "../FormInputs/TextInput";
 
 export default function ColorForm({ colorSet, setColorSet }) {
   const [currentColor, setCurrentColor] = useState({
@@ -32,7 +34,7 @@ export default function ColorForm({ colorSet, setColorSet }) {
       <label htmlFor="role" aria-required>
         Role
       </label>
-      <input type="text" name="role" required></input>
+      <TextInput type="text" name="role" required="true"></TextInput>
       {/* <ul>
         {colorSet.map((color) => (
           <li key="newColor">
@@ -70,7 +72,7 @@ export default function ColorForm({ colorSet, setColorSet }) {
         }
       </ul>
 
-      <button>Add Theme Color</button>
+      <Button type="submit" text="Add Theme Color"></Button>
     </form>
   );
 }
