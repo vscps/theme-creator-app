@@ -9,3 +9,18 @@
   background: black;
   color: white;
 }
+
+.deletion-area {
+  display: flex;
+  align-items: center;
+}
+
+.message {
+  padding: 10px;
+  background-color: white;
+  color: black;
+}
+
+.hidden {
+  display: none;
+}
