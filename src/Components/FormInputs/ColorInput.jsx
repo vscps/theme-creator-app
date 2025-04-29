@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import "./ColorInput.css";
+import TextInput from "./TextInput";
 
 export default function ColorInput({
   colorName,
@@ -17,7 +18,11 @@ export default function ColorInput({
         value={hexColor}
         onChange={onChangeFunction}
       />
-      <input type="text" value={hexColor} onChange={onChangeFunction}></input>
+      <TextInput
+        type="text"
+        value={hexColor}
+        onChange={onChangeFunction}
+      ></TextInput>
     </Fragment>
   );
 }

@@ -1,0 +1,12 @@
+button {
+  box-sizing: border-box;
+  cursor: pointer;
+  margin: 15px 0px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: orange;
+  color: white;
+  transition: all 0.5s;
+}
