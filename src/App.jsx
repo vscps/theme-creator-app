@@ -6,17 +6,34 @@ import { useState } from "react";
 
 function App() {
   const [themeColors, setThemeColors] = useState(initialColors);
+  const numColors = themeColors.length;
+
+  function handleDeleteColor(id) {
+    setThemeColors(themeColors.filter((color) => color.id !== id));
+  }
   return (
     <>
       <h1>Theme Creator</h1>
 
       {themeColors.map((color) => {
-        return <Color key={color.id} color={color} />;
+        return (
+          <Color
+            key={color.id}
+            color={color}
+            handleDelete={handleDeleteColor}
+          />
+        );
       })}
       <ColorForm
         colorSet={themeColors}
         setColorSet={setThemeColors}
+        numColors={numColors}
       ></ColorForm>
+      {numColors == 0 ? (
+        <p>No colors available. Start by adding a color.</p>
+      ) : (
+        ""
+      )}
     </>
   );
 }

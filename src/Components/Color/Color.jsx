@@ -1,6 +1,11 @@
 import "./Color.css";
+import Button from "../Button/Button";
+import { useState } from "react";
 
-export default function Color({ color }) {
+export default function Color({ color, handleDelete }) {
+  console.log(color.id);
+  const [isVisible, setVisibility] = useState(false);
+
   return (
     <div
       className="color-card"
@@ -12,6 +17,29 @@ export default function Color({ color }) {
       <h3 className="color-card-headline">{color.hex}</h3>
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
+      <div className="deletion-area">
+        <div className={`message ${isVisible ? "" : "hidden"}`}>
+          Really delete?
+        </div>
+        <Button
+          type="button"
+          text="Cancel"
+          className={isVisible ? "" : "hidden"}
+          onClick={() => setVisibility(!isVisible)}
+        ></Button>
+        <Button
+          type="button"
+          text="Delete now"
+          className={isVisible ? "" : "hidden"}
+          onClick={() => handleDelete(color.id)}
+        ></Button>
+        <Button
+          type="button"
+          text="Delete"
+          className={!isVisible ? "" : "hidden"}
+          onClick={() => setVisibility(!isVisible)}
+        ></Button>
+      </div>
     </div>
   );
 }
