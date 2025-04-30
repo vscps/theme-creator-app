@@ -2,9 +2,10 @@ import "./Color.css";
 import Button from "../Button/Button";
 import { useState } from "react";
 
-export default function Color({ color }) {
+export default function Color({ color, handleDelete }) {
+  console.log(color.id);
   const [isVisible, setVisibility] = useState(false);
-  console.log(isVisible);
+
   return (
     <div
       className="color-card"
@@ -28,7 +29,14 @@ export default function Color({ color }) {
         ></Button>
         <Button
           type="button"
+          text="Delete now"
+          className={isVisible ? "" : "hidden"}
+          onClick={() => handleDelete(color.id)}
+        ></Button>
+        <Button
+          type="button"
           text="Delete"
+          className={!isVisible ? "" : "hidden"}
           onClick={() => setVisibility(!isVisible)}
         ></Button>
       </div>
