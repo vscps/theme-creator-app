@@ -6,6 +6,7 @@ import { useState } from "react";
 
 function App() {
   const [themeColors, setThemeColors] = useState(initialColors);
+  const numColors = themeColors.length;
 
   function handleDeleteColor(id) {
     setThemeColors(themeColors.filter((color) => color.id !== id));
@@ -26,7 +27,13 @@ function App() {
       <ColorForm
         colorSet={themeColors}
         setColorSet={setThemeColors}
+        numColors={numColors}
       ></ColorForm>
+      {numColors == 0 ? (
+        <p>No colors available. Start by adding a color.</p>
+      ) : (
+        ""
+      )}
     </>
   );
 }
