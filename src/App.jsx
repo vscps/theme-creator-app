@@ -3,16 +3,25 @@ import Color from "./Components/Color/Color";
 import ColorForm from "./Components/ColorForm/ColorForm";
 import "./App.css";
 import { useState } from "react";
+import { useEffect } from "react";
 
 function App() {
-  const [themeColors, setThemeColors] = useState(initialColors);
+  // Save the current themeColors state in local storage and read it the next time you visit the page. If the local storage is empty, use the initial colors as fallback.
+  const [themeColors, setThemeColors] = useState(() => {
+    const storedColors = localStorage.getItem("savedThemeColors");
+    return storedColors ? JSON.parse(storedColors) : initialColors;
+  });
+
+  // Trigger saving of colors every time the themColors Array updates.
+  useEffect(() => {
+    localStorage.setItem("savedThemeColors", JSON.stringify(themeColors));
+  }, [themeColors]);
+
   const numColors = themeColors.length;
 
   function handleDeleteColor(id) {
     setThemeColors(themeColors.filter((color) => color.id !== id));
   }
-
-  function handleEditColor(id) {}
 
   return (
     <>
