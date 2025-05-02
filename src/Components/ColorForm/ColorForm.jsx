@@ -4,39 +4,98 @@ import ColorInput from "../FormInputs/ColorInput";
 import { v4 as uuid } from "uuid";
 import Button from "../Button/Button";
 import TextInput from "../FormInputs/TextInput";
+import { Fragment } from "react";
+import { useEffect } from "react";
 
-export default function ColorForm({ colorSet, setColorSet }) {
+export default function ColorForm({
+  themeColors,
+  setThemeColors,
+  currentColorId,
+  setCurrentColorId,
+}) {
   const [currentColor, setCurrentColor] = useState({
     hex: "#000000",
     contrastText: "#ffffff",
     role: "",
   });
 
-  function handleAddThemeColor(event) {
+  // Prefill the form fields with the current color values in edit mode
+  // Compare the current color that is edited with the array of all colors to find the current color values
+  useEffect(() => {
+    if (currentColorId) {
+      const colorToEdit = themeColors.find((c) => c.id === currentColorId);
+      if (colorToEdit) {
+        setCurrentColor({
+          hex: colorToEdit.hex,
+          contrastText: colorToEdit.contrastText,
+          role: colorToEdit.role,
+        });
+      }
+    }
+  }, [currentColorId, themeColors]);
+
+  //Function for handling both adding a color and prefilling the form in edit mode with the current color values
+  function handleThemeColor(event) {
     event.preventDefault();
     const role = event.target.role.value;
-    const colorData = { id: uuid(), ...currentColor, role: role };
 
-    setColorSet([colorData, ...colorSet]);
+    if (currentColorId) {
+      // Edit mode: update form with existing color values
+      const updatedColors = themeColors.map((color) =>
+        color.id === currentColorId
+          ? { ...color, ...currentColor, role }
+          : color
+      );
+      setThemeColors(updatedColors);
+      setCurrentColorId(null);
+    } else {
+      // Add mode: Take the default state for the currentColor, construct a new object and add it to the theme colors array
+      const colorData = { id: uuid(), ...currentColor, role: role };
+      setThemeColors([colorData, ...themeColors]);
+    }
 
-    // Reset the current color fields after adding
+    // Reset the form after the editing or adding action back to its default values
     setCurrentColor({
       hex: "#000000",
       contrastText: "#ffffff",
       role: "",
     });
 
-    event.target.role.value = "";
+    event.target.reset();
+  }
+
+  // Function for updating the values of an existing color (when in edit mode)
+
+  function handleUpdateThemeColor(event) {
+    event.preventDefault();
+
+    const updatedColors = themeColors.map((color) =>
+      color.id === currentColorId ? { ...color, ...currentColor } : color
+    );
+
+    setThemeColors(updatedColors);
+    setCurrentColorId(null);
   }
 
   return (
-    <form onSubmit={handleAddThemeColor} className="colorForm">
+    <form
+      onSubmit={currentColorId ? handleUpdateThemeColor : handleThemeColor}
+      className="colorForm"
+    >
       <label htmlFor="role" aria-required>
         Role
       </label>
-      <TextInput type="text" name="role" required="true"></TextInput>
+      <TextInput
+        type="text"
+        name="role"
+        value={currentColor.role}
+        onChange={(event) =>
+          setCurrentColor({ ...currentColor, role: event.target.value })
+        }
+        required="true"
+      ></TextInput>
       {/* <ul>
-        {colorSet.map((color) => (
+        {themeColors.map((color) => (
           <li key="newColor">
             <ColorInput colorRole={color.role} hexColor={color.hex} />
             <ColorInput
@@ -46,33 +105,49 @@ export default function ColorForm({ colorSet, setColorSet }) {
           </li>
         ))}
       </ul> */}
-      <ul>
-        {
-          <li key="newColor">
-            <ColorInput
-              colorName="hex"
-              hexColor={currentColor.hex}
-              colorDescription={"Primary Color"}
-              onChangeFunction={(event) =>
-                setCurrentColor({ ...currentColor, hex: event.target.value })
-              }
-            />
-            <ColorInput
-              colorName="contrastText"
-              hexColor={currentColor.contrastText}
-              colorDescription={"Text Contrast Color"}
-              onChangeFunction={(event) =>
-                setCurrentColor({
-                  ...currentColor,
-                  contrastText: event.target.value,
-                })
-              }
-            />
-          </li>
-        }
-      </ul>
+      <Fragment>
+        <ul>
+          {
+            <li key="newColor">
+              <ColorInput
+                colorName="hex"
+                hexColor={currentColor.hex}
+                colorDescription={"Primary Color"}
+                setThemeColors={setThemeColors}
+                onChangeFunction={(event) =>
+                  setCurrentColor({ ...currentColor, hex: event.target.value })
+                }
+              />
+              <ColorInput
+                colorName="contrastText"
+                hexColor={currentColor.contrastText}
+                colorDescription={"Text Contrast Color"}
+                setThemeColors={setThemeColors}
+                onChangeFunction={(event) =>
+                  setCurrentColor({
+                    ...currentColor,
+                    contrastText: event.target.value,
+                  })
+                }
+              />
+            </li>
+          }
+        </ul>
+      </Fragment>
 
-      <Button type="submit" text="Add Theme Color"></Button>
+      {currentColorId ? (
+        <Fragment>
+          <Button type="submit" text="Update Color"></Button>
+          <Button
+            type="button"
+            text="Cancel editing"
+            onClick={() => setCurrentColorId(null)}
+          ></Button>
+        </Fragment>
+      ) : (
+        <Button type="submit" text="Add Theme Color"></Button>
+      )}
+      {/* Buttons for color edition mode */}
     </form>
   );
 }

@@ -10,7 +10,7 @@
   color: white;
 }
 
-.deletion-area {
+.button-area {
   display: flex;
   align-items: center;
 }
@@ -19,8 +19,4 @@
   padding: 10px;
   background-color: white;
   color: black;
-}
-
-.hidden {
-  display: none;
 }
