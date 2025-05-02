@@ -6,18 +6,13 @@ import { useState } from "react";
 
 function App() {
   const [themeColors, setThemeColors] = useState(initialColors);
-  const [isDeletionMode, setDeletionMode] = useState(false);
-  const [isEditMode, setEditMode] = useState(false);
   const numColors = themeColors.length;
 
   function handleDeleteColor(id) {
-    setDeletionMode(false);
     setThemeColors(themeColors.filter((color) => color.id !== id));
   }
 
-  function handleEditColor(id) {
-    setEditMode(true);
-  }
+  function handleEditColor(id) {}
 
   return (
     <>
@@ -29,23 +24,15 @@ function App() {
             key={color.id}
             color={color}
             handleDelete={handleDeleteColor}
-            setDeletionMode={setDeletionMode}
-            isDeletionMode={isDeletionMode}
-            isEditMode={isEditMode}
-            setEditMode={setEditMode}
-            colorSet={themeColors}
+            themeColors={themeColors}
             id={color.id}
           />
         );
       })}
       {/* Add Form below list of colors */}
       <ColorForm
-        colorSet={themeColors}
-        setColorSet={setThemeColors}
-        setDeletionMode={setDeletionMode}
-        isDeletionMode={isDeletionMode}
-        isEditMode={isEditMode}
-        setEditMode={setEditMode}
+        themeColors={themeColors}
+        setThemeColors={setThemeColors}
       ></ColorForm>
       {numColors == 0 ? (
         <p>No colors available. Start by adding a color.</p>

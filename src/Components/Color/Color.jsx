@@ -6,17 +6,13 @@ import { Fragment } from "react";
 
 export default function Color({
   color,
+  themeColors,
   setThemeColors,
   handleDelete,
-  isDeletionMode,
-  setDeletionMode,
-  isEditMode,
-  setEditMode,
-  colorSet,
   id,
 }) {
-  const [isVisible, setVisibility] = useState(false);
   const [currentColorId, setCurrentColorId] = useState(null);
+  const [currentDeleteId, setCurrentDeleteId] = useState(null);
 
   return (
     <div
@@ -30,14 +26,14 @@ export default function Color({
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
       <div className="button-area">
-        {isDeletionMode === true ? (
+        {currentDeleteId === color.id ? (
           <Fragment>
             <div className="message">Really delete?</div>
             <Button
               type="button"
               text="Cancel"
               onClick={() => {
-                setDeletionMode(false);
+                setCurrentDeleteId(null);
               }}
             ></Button>
             <Button
@@ -45,6 +41,7 @@ export default function Color({
               text="Delete now"
               onClick={() => {
                 handleDelete(color.id);
+                setCurrentDeleteId(null);
               }}
             ></Button>
           </Fragment>
@@ -52,26 +49,23 @@ export default function Color({
           ""
         )}
         {/* State buttons for toggling edit and deletion modes */}
-        {currentColorId === null && isDeletionMode === false ? (
+        {currentColorId === null && !currentDeleteId ? (
           <Button
             type="button"
             text="Edit"
             onClick={() => {
-              // setEditMode(true);
               setCurrentColorId(id);
             }}
           ></Button>
         ) : (
           ""
         )}
-        {isDeletionMode !== true && currentColorId == null ? (
+        {!currentDeleteId && currentColorId == null ? (
           <Button
             type="button"
             text="Delete"
             onClick={() => {
-              setVisibility(!isVisible);
-              setDeletionMode(true);
-              // setEditMode(false);
+              setCurrentDeleteId(id);
               setCurrentColorId(null);
             }}
           ></Button>
@@ -79,15 +73,12 @@ export default function Color({
           ""
         )}
         {/* Toggle EditForm in edit state only and only for the current color */}
-        {colorSet.map((color) =>
+        {themeColors.map((color) =>
           color.id === currentColorId ? (
             <Fragment key={color.id}>
               <ColorForm
-                colorSet={colorSet}
-                setColorSet={setThemeColors}
+                themeColors={themeColors}
                 setThemeColors={setThemeColors}
-                isDeletionMode={isDeletionMode}
-                setDeletionMode={setDeletionMode}
                 currentColorId={currentColorId}
                 setCurrentColorId={setCurrentColorId}
               ></ColorForm>
