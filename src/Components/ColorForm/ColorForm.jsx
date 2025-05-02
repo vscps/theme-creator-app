@@ -34,6 +34,7 @@ export default function ColorForm({
     }
   }, [currentColorId, themeColors]);
 
+  //Function for handling both adding a color and prefilling the form in edit mode with the current color values
   function handleThemeColor(event) {
     event.preventDefault();
     const role = event.target.role.value;
@@ -63,8 +64,24 @@ export default function ColorForm({
     event.target.reset();
   }
 
+  // Function for updating the values of an existing color (when in edit mode)
+
+  function handleUpdateThemeColor(event) {
+    event.preventDefault();
+
+    const updatedColors = themeColors.map((color) =>
+      color.id === currentColorId ? { ...color, ...currentColor } : color
+    );
+
+    setThemeColors(updatedColors);
+    setCurrentColorId(null);
+  }
+
   return (
-    <form onSubmit={handleThemeColor} className="colorForm">
+    <form
+      onSubmit={currentColorId ? handleUpdateThemeColor : handleThemeColor}
+      className="colorForm"
+    >
       <label htmlFor="role" aria-required>
         Role
       </label>

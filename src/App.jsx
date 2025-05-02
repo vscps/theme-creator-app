@@ -25,6 +25,7 @@ function App() {
             color={color}
             handleDelete={handleDeleteColor}
             themeColors={themeColors}
+            setThemeColors={setThemeColors}
             id={color.id}
           />
         );
